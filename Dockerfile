@@ -3,18 +3,18 @@ FROM alpine:3.8
 MAINTAINER Kronuz
  
 ENV NGINX_VERSION 1.14.0
-# ´úÀí,ÓÃÓÚÎÄ¼şÏÂÔØ
+# ä»£ç†,ç”¨äºæ–‡ä»¶ä¸‹è½½
 ENV HTTP_PROXY 'http://10.179.161.248:3128'
 ENV HTTPS_PROXY 'http://10.179.161.248:3128'
 ENV BUILD_ROOT /usr/src
-# nginxÔËĞĞluaĞèÒª
+# nginxè¿è¡Œluaéœ€è¦
 ADD nginx_devel_kit.tar.gz  $BUILD_ROOT/
 ADD nginx_lua_module.tar.gz  $BUILD_ROOT/
-# luaÖĞÔËĞĞcjsonĞèÒª
+# luaä¸­è¿è¡Œcjsonéœ€è¦ï¼ŒåŒ…ä¸­çš„Makfileæ–‡ä»¶éœ€è¦æ‰‹å·¥ä¿®æ”¹LUA_INCLUDE_DIRè·¯å¾„ä¸ºluajitçš„å®‰è£…è·¯å¾„ï¼š/usr/local/include/luajit-2.0
 ADD lua-cjson-2.1.0.tar.gz $BUILD_ROOT/
-# luaÖĞÔËĞĞkafkaĞèÒª
+# luaä¸­è¿è¡Œkafkaéœ€è¦
 ADD lua-resty-kafka-0.06.tar.gz $BUILD_ROOT/
-# luaÖĞÔËĞĞuuidĞèÒª
+# luaä¸­è¿è¡Œuuidéœ€è¦
 ADD lua-resty-jit-uuid-0.0.7.tar.gz $BUILD_ROOT/
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
   && export http_proxy=http://10.179.161.248:3128 \
@@ -86,22 +86,22 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     geoip-dev \
   && mkdir -p $BUILD_ROOT \
   && cd $BUILD_ROOT \
-  #  °²×°nginxĞèÒª
+  #  å®‰è£…nginxéœ€è¦
   && curl -k https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
   && curl -k https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
   #   && curl -k https://github.com/openresty/headers-more-nginx-module/archive/v0.33.tar.gz -o headers-more-nginx-module.tar.gz \
   #   && curl -k http://h264.code-shop.com/download/nginx_mod_h264_streaming-2.2.7.tar.gz -o nginx_mod_h264_streaming.tar.gz \
   #   && curl -k https://github.com/wandenberg/nginx-push-stream-module/archive/0.5.4.tar.gz -o nginx-push-stream-module.tar.gz \
-  #  nginxÔËĞĞluaĞèÒªluajit,nginx_devel_kit,nginx_lua_module
+  #  nginxè¿è¡Œluaéœ€è¦luajit,nginx_devel_kit,nginx_lua_module
   && curl -k http://luajit.org/download/LuaJIT-2.0.5.tar.gz -o LuaJIT-2.0.5.tar.gz \
-  # curl ÄÚÍøÏÂÔØ²»ÏÂÀ´£¬ÓÃADDÖ±½Ó´«Èë
+  # curl å†…ç½‘ä¸‹è½½ä¸ä¸‹æ¥ï¼Œç”¨ADDç›´æ¥ä¼ å…¥
   # && curl -k http://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz -o nginx_devel_kit.tar.gz \
   # && curl -k http://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz -o nginx_lua_module.tar.gz \
   # && export GNUPGHOME="$(mktemp -d)" \
   # && rm -rf "$GNUPGHOME" nginx.tar.gz.asc \
   # && mkdir -p /usr/src \
-  # tar -zxC²ÎÊı²»¿ÉÊ¶±ğ,¸Ä³ÉvxzfÁË
-  # °²×°nginxºÍLuaJIT
+  # tar -zxCå‚æ•°ä¸å¯è¯†åˆ«,æ”¹æˆvxzfäº†
+  # å®‰è£…nginxå’ŒLuaJIT
   && tar vxzf  nginx.tar.gz \
   #   && tar vxzf /usr/src -f headers-more-nginx-module.tar.gz \
   #   && tar vxzf /usr/src -f nginx_mod_h264_streaming.tar.gz \
@@ -138,14 +138,14 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
   && ln -s ../../usr/lib/nginx/modules /etc/nginx/modules \
   && strip /usr/sbin/nginx* \
   && strip /usr/lib/nginx/modules/*.so \
-  # °²×°cjson
+  # å®‰è£…cjson
   && echo "make cjson" \  
   && cd $BUILD_ROOT/lua-cjson-2.1.0 \
   && make \
   && make install \
-  # °²×°lua-kafka
+  # å®‰è£…lua-kafka
   && cp -rf $BUILD_ROOT/lua-resty-kafka-0.06/lib/resty  /usr/local/share/lua/5.1/ \
-  # °²×°jit-uuid
+  # å®‰è£…jit-uuid
   && cp -rf $BUILD_ROOT/lua-resty-jit-uuid-0.0.7/lib/resty  /usr/local/share/lua/5.1/ \
   && rm -rf $BUILD_ROOT/nginx-$NGINX_VERSION \
   #   && rm -rf $BUILD_ROOT/headers-more-nginx-module-0.33 \
